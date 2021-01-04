@@ -140,22 +140,30 @@ function DrawTetromino() {
 }
 
 function HandleKeyPress(key) {
-	if (key.keyCode === 65) {
-		direction = DIRECTION.LEFT;
-		if (!HittingTheWall()) {
-			DeleteTetromino();
-			startX--;
-			DrawTetromino();
+	if (winOrLose != 'Game Over') {
+		if (key.keyCode === 65) {
+			direction = DIRECTION.LEFT;
+			if (!HittingTheWall() && !CheckForHorizontalCollision()) {
+				DeleteTetromino();
+				startX--;
+				DrawTetromino();
+			}
+		} else if (key.keyCode === 68) {
+			direction = DIRECTION.RIGHT;
+			if (!HittingTheWall() && !CheckForHorizontalCollision()) {
+				DeleteTetromino();
+				startX++;
+				DrawTetromino();
+			}
+		} else if (key.keyCode === 83) {
+			MoveTetrominoDown();
 		}
-	} else if (key.keyCode === 68) {
-		direction = DIRECTION.RIGHT;
-		if (!HittingTheWall()) {
-			DeleteTetromino();
-			startX++;
-			DrawTetromino();
-		}
-	} else if (key.keyCode === 83) {
-		direction = DIRECTION.DOWN;
+	}
+}
+
+function MoveTetrominoDown() {
+	direction = DIRECTION.DOWN;
+	if (!CheckForVerticalCollision()) {
 		DeleteTetromino();
 		startY++;
 		DrawTetromino();
@@ -242,4 +250,52 @@ function HittingTheWall() {
 		}
 	}
 	return false;
+}
+
+function CheckForVerticalCollision() {
+	let tetrominoCopy = currentTetromino;
+	let collision = false;
+	for (let i = 0; i < tetrominoCopy.length; i++) {
+		let square = tetrominoCopy[i];
+		let x = square[0] + startX;
+		let y = square[1] + startY;
+		if (direction === DIRECTION.DOWN) {
+			y++;
+		}
+		if (gameBoardArray[x][y + 1] === 1) {
+			if (typeof stoppedShapeArray[x][y + 1] === 'string') {
+				DeleteTetromino();
+				startY++;
+				DrawTetromino();
+				collision = true;
+				break;
+			}
+		if (y >= 20) {
+			collision = true
+			break;
+		}
+		}
+	}
+	if (collision) {
+		if (startY <= 2) {
+			winOrLose = 'Game Over'
+			ctx.fillStyle = 'white'
+			ctx.fillRect(310, 242, 140, 30)
+			ctx.fillStyle = 'black'
+			ctx.fillText(winOrLose, 310, 261)
+		} else {
+			for (let i = 0; i < tetrominoCopy.length; i++) {
+				let square = tetrominoCopy[i]
+				let x = square[0] + startX
+				let y = square[1] + startY
+				stoppedShapeArray[x][y] = currentTetrominoColor
+			}
+			CheckForCompletedRows();
+			CreateTetromino()
+			direction = DIRECTION.IDLE
+			startX = 4;
+			startY = 0;
+			DrawTetromino
+		}
+	}
 }
