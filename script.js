@@ -320,3 +320,65 @@ function CheckForHorizontalCollision() {
 	}
 	return collision;
 }
+
+function CheckForCompletedRows() {
+	let rowsToDelete = 0;
+	let startOfDeletion = 0;
+	for (let y = 0; y < gBArrayHeight; y++) {
+		let completed = true;
+		for (let x = 0; x < gBArrayWidth; x++) {
+			let square = stoppedShapeArray[x][y];
+			if (square === 0 || typeof square === 'undefined') {
+				completed = false;
+				break;
+			}
+		}
+		if(completed) {
+			if (startOfDeletion === 0) startOfDeletion = y
+			rowsToDelete++
+			for (let i = 0; i < gBArrayWidth; i++) {
+				stoppedShapeArray[i][y] = 0
+				gameBoardArray[i][y] = 0
+				let coordinateX = coordinateArray[i][y].x
+				let coordinateY = coordinateArray[i][y].y
+				ctx.fillStyle = 'white'
+				ctx.fillRect(coordinateX, coordinateY, 21, 21)
+			}
+		}
+	}
+	if(rowsToDelete > 0) {
+		score += 10
+		ctx.fillStyle = 'white'
+		ctx.fillRect(310, 109, 140, 19)
+		ctx.fillStyle = 'black'
+		ctx.fillText(score.toString(), 310, 127)
+		MoveAllRowsDown(rowsToDelete, startOfDeletion)
+	}
+}
+
+function MoveAllRowsDown(rowsToDelete, startOfDeletion) {
+	for (var i = startOfDeletion - 1; i >=0; i--) {
+		for (var x = 0; x < gBArrayWidth; x++) {
+			var y2 = i + rowsToDelete
+			var square = stoppedShapeArray[x][i]
+			var nextSquare = stoppedShapeArray[x][y2]
+			if (typeof square === 'string') {
+				nextSquare = square
+				gameBoardArray[x][y2] = 1;
+				stoppedShapeArray[x][y] = square
+				let coordinateX = coordinateArray[x][y2].x
+				let coordinateY = coordinateArray[x][y2].y
+				ctx.fillStyle = nextSquare
+				ctx.fillRect(coordinateX, coordinateY, 21, 21)
+
+				square = 0;
+				gameBoardArray[x][i] = 0
+				stoppedShapeArray[x][i] = 0
+				coordinateX = coordinateArray[x][i].x
+				coordinateY = coordinateArray[x][i].y
+				ctx.fillStyle = 'white'
+				ctx.fillRect(coordinateX, coordinateY, 21, 21)
+			}
+		}
+	}
+}
