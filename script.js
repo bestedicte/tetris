@@ -6,13 +6,11 @@ let startX = 4;
 let startY = 0;
 let score = 0;
 let level = 1;
-let winOrLose = 'Playing'
-let tetrisLogo
+let winOrLose = 'Playing';
 
-
-let coordinateArray = [...Array(gBArrayHeight)].map((e =>
-	Array(gBArrayWidth).fill(0))
-)
+let coordinateArray = [...Array(gBArrayHeight)].map((e) =>
+	Array(gBArrayWidth).fill(0)
+);
 
 let currentTetromino = [
 	[1, 0],
@@ -35,13 +33,13 @@ let tetrominoColors = [
 
 let currentTetrominoColor;
 
-let gameBoardArray = [...Array(gBArrayHeight)].map((e =>
+let gameBoardArray = [...Array(gBArrayHeight)].map((e) =>
 	Array(gBArrayWidth).fill(0)
-));
+);
 
-let stoppedShapeArray = [...Array(gBArrayHeight)].map((e =>
+let stoppedShapeArray = [...Array(gBArrayHeight)].map((e) =>
 	Array(gBArrayWidth).fill(0)
-));
+);
 
 let DIRECTION = {
 	IDLE: 0,
@@ -88,35 +86,34 @@ function SetupCanvas() {
 	ctx.strokeStyle = 'black';
 	ctx.strokeRect(8, 8, 280, 462);
 
-	tetrisLogo = new Image(161, 54)
-	tetrisLogo.onLoad = DrawTetrisLogo;
-	tetrisLogo.src = tetrisLogo.png;
+	tetrisLogo = new Image(161, 54);
+	tetrisLogo.onload = DrawTetrisLogo;
+	tetrisLogo.src = 'tetrislogo.png';
 
 	ctx.fillStyle = 'black';
-	ctx.font = '21px Arial'
-	ctx.fillText('SCORE', 300, 98)
+	ctx.font = '21px Arial';
+	ctx.fillText('SCORE', 300, 98);
 
-	ctx.strokeRect(300, 107, 161, 24)
+	ctx.strokeRect(300, 107, 161, 24);
 
-	ctx.fillText(score.toString(), 310, 127)
+	ctx.fillText(score.toString(), 310, 127);
 
-	ctx.fillText('LEVEL', 300, 157)
-	ctx.strokeRect(300, 171, 161, 24)
-	ctx.fillText(level.toString(), 310, 190)
+	ctx.fillText('LEVEL', 300, 157);
+	ctx.strokeRect(300, 171, 161, 24);
+	ctx.fillText(level.toString(), 310, 190);
 
-	ctx.fillText('WIN / LOSE', 300, 221)
-	ctx.fillText(winOrLose, 310, 261)
-	ctx.strokeRect(300, 232, 161, 95)
+	ctx.fillText('WIN / LOSE', 300, 221);
+	ctx.fillText(winOrLose, 310, 261);
+	ctx.strokeRect(300, 232, 161, 95);
 
-	ctx.fillText('CONTROLS', 300, 354)
-	ctx.strokeRect(300, 366, 161, 104)
-	ctx.font = '19px Arial'
+	ctx.fillText('CONTROLS', 300, 354);
+	ctx.strokeRect(300, 366, 161, 104);
+	ctx.font = '19px Arial';
 
-	ctx.fillText('A : Move Left', 310, 388)
-	ctx.fillText('D : Move Right', 310, 413)
-	ctx.fillText('S : Move Down', 310, 438)
-	ctx.fillText('E : Rotate', 310, 463)
-
+	ctx.fillText('A : Move Left', 310, 388);
+	ctx.fillText('D : Move Right', 310, 413);
+	ctx.fillText('S : Move Down', 310, 438);
+	ctx.fillText('E : Rotate', 310, 463);
 
 	document.addEventListener('keydown', HandleKeyPress);
 	CreateTetrominos();
@@ -127,9 +124,8 @@ function SetupCanvas() {
 }
 
 function DrawTetrisLogo() {
-	ctx.drawImage(tetrisLogo, 300, 8, 161, 54)
+	ctx.drawImage(tetrisLogo, 300, 8, 161, 54);
 }
-
 
 function DrawTetromino() {
 	for (let i = 0; i < currentTetromino.length; i++) {
@@ -180,7 +176,12 @@ function DeleteTetromino() {
 
 function CreateTetrominos() {
 	// T
-	tetrominos.push([[1, 0], [0, 1], [1, 1], [2, 1]]);
+	tetrominos.push([
+		[1, 0],
+		[0, 1],
+		[1, 1],
+		[2, 1],
+	]);
 	// I
 	tetrominos.push([
 		[0, 0],
