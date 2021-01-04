@@ -33,12 +33,12 @@ let tetrominoColors = [
 
 let currentTetrominoColor;
 
-let gameBoardArray = [...Array(gBArrayHeight)].map((e) =>
-	Array(gBArrayWidth).fill(0)
+let gameBoardArray = [...Array(20)].map(e =>
+	Array(12).fill(0)
 );
 
-let stoppedShapeArray = [...Array(gBArrayHeight)].map((e) =>
-	Array(gBArrayWidth).fill(0)
+let stoppedShapeArray = [...Array(20)].map(e =>
+	Array(12).fill(0)
 );
 
 let DIRECTION = {
@@ -60,8 +60,8 @@ class Coordinates {
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
 function CreateCoordinateArray() {
-	let i = 0,
-		j = 0;
+	let xR = 0, yR = 19;
+	let i = 0, j = 0;
 	for (let y = 9; y <= 446; y += 23) {
 		for (let x = 11; x <= 264; x += 23) {
 			coordinateArray[i][j] = new Coordinates(x, y);
@@ -121,6 +121,8 @@ function SetupCanvas() {
 
 	CreateCoordinateArray();
 	DrawTetromino();
+
+	console.log(coordinateArray[0][1].x)
 }
 
 function DrawTetrisLogo() {
@@ -157,6 +159,8 @@ function HandleKeyPress(key) {
 			}
 		} else if (key.keyCode === 83) {
 			MoveTetrominoDown();
+		} else if (key.keyCode === 69) {
+			RotateTetromino()
 		}
 	}
 }
@@ -169,6 +173,13 @@ function MoveTetrominoDown() {
 		DrawTetromino();
 	}
 }
+
+window.setInterval(function() {
+	if (winOrLose != 'Game Over'){
+		MoveTetrominoDown()
+	}
+}, 1000)
+
 
 function DeleteTetromino() {
 	for (let i = 0; i < currentTetromino.length; i++) {
@@ -384,7 +395,7 @@ function MoveAllRowsDown(rowsToDelete, startOfDeletion) {
 }
 
 function RotateTetromino() {
-	let newRotation = new Array[]
+	let newRotation = new Array()
 	let tetrominoCopy = currentTetromino;
 	let currentTetrominoBackUp
 	for (let i = 0; i < tetrominoCopy.length; i++) {
@@ -395,4 +406,25 @@ function RotateTetromino() {
 		let newY = x
 		newRotation.push([newX, newY])
 	}
+	DeleteTetromino()
+	try {
+		currentTetromino = newRotation
+		DrawTetromino()
+	} catch (e) {
+		if (e instanceof TypeError) {
+			currentTetromino = currentTetrominoBackUp;
+			DeleteTetromino()
+			DrawTetromino()
+		}
+	}
+}
+
+function GetLastSquareX() {
+	let lastX = 0
+	for (let i = 0; i < currentTetromino.length; i++) {
+		let square = currentTetromino[i]
+		if (square[0] > lastX)
+		lastX = square[0]
+	}
+	return lastX
 }
