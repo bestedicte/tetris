@@ -1,0 +1,10 @@
+body {
+	text-align: center;
+	background: white;
+}
+
+#tetris {
+	background: white;
+	margin-left: 10px;
+	margin-top: 10px;
+}
