@@ -270,32 +270,53 @@ function CheckForVerticalCollision() {
 				collision = true;
 				break;
 			}
-		if (y >= 20) {
-			collision = true
-			break;
-		}
+			if (y >= 20) {
+				collision = true;
+				break;
+			}
 		}
 	}
 	if (collision) {
 		if (startY <= 2) {
-			winOrLose = 'Game Over'
-			ctx.fillStyle = 'white'
-			ctx.fillRect(310, 242, 140, 30)
-			ctx.fillStyle = 'black'
-			ctx.fillText(winOrLose, 310, 261)
+			winOrLose = 'Game Over';
+			ctx.fillStyle = 'white';
+			ctx.fillRect(310, 242, 140, 30);
+			ctx.fillStyle = 'black';
+			ctx.fillText(winOrLose, 310, 261);
 		} else {
 			for (let i = 0; i < tetrominoCopy.length; i++) {
-				let square = tetrominoCopy[i]
-				let x = square[0] + startX
-				let y = square[1] + startY
-				stoppedShapeArray[x][y] = currentTetrominoColor
+				let square = tetrominoCopy[i];
+				let x = square[0] + startX;
+				let y = square[1] + startY;
+				stoppedShapeArray[x][y] = currentTetrominoColor;
 			}
 			CheckForCompletedRows();
-			CreateTetromino()
-			direction = DIRECTION.IDLE
+			CreateTetromino();
+			direction = DIRECTION.IDLE;
 			startX = 4;
 			startY = 0;
-			DrawTetromino
+			DrawTetromino;
 		}
 	}
+}
+
+function CheckForHorizontalCollision() {
+	let tetrominoCopy = currentTetromino;
+	let collision = false;
+	for (let i = 0; i < tetrominoCopy.length; i++) {
+		let square = tetrominoCopy[i];
+		let x = square[0] + startX;
+		let y = square[1] + startY;
+		if (direction === DIRECTION.LEFT) {
+			x--;
+		} else if (direction === DIRECTION.RIGHT) {
+			x++;
+		}
+		var stoppedShapeValue = stoppedShapeArray[x][y];
+		if (typeof stoppedShapeValue === 'string') {
+			collision = true;
+			break;
+		}
+	}
+	return collision;
 }
