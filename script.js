@@ -382,3 +382,17 @@ function MoveAllRowsDown(rowsToDelete, startOfDeletion) {
 		}
 	}
 }
+
+function RotateTetromino() {
+	let newRotation = new Array[]
+	let tetrominoCopy = currentTetromino;
+	let currentTetrominoBackUp
+	for (let i = 0; i < tetrominoCopy.length; i++) {
+		currentTetrominoBackUp = [...currentTetromino]
+		let x = tetrominoCopy[i][0]
+		let y = tetrominoCopy[i][1]
+		let newX = (GetLastSquareX() - y)
+		let newY = x
+		newRotation.push([newX, newY])
+	}
+}
