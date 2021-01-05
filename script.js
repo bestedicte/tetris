@@ -460,7 +460,7 @@ function MoveAllRowsDown(rowsToDelete, startOfDeletion) {
 		for (var x = 0; x < gBArrayWidth; x++) {
 			var y2 = i + rowsToDelete
 			var square = stoppedShapeArray[x][i]
-			var nextSquare = stoppedShapeArray[x][yeewaw2]
+			var nextSquare = stoppedShapeArray[x][y2]
 			if (typeof square === 'string') {
 				nextSquare = square
 				gameBoardArray[x][y2] = 1; // Put block into GBA
