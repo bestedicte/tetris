@@ -460,19 +460,20 @@ function MoveAllRowsDown(rowsToDelete, startOfDeletion) {
 		for (var x = 0; x < gBArrayWidth; x++) {
 			var y2 = i + rowsToDelete
 			var square = stoppedShapeArray[x][i]
-			var nextSquare = stoppedShapeArray[x][y2]
+			var nextSquare = stoppedShapeArray[x][yeewaw2]
 			if (typeof square === 'string') {
 				nextSquare = square
 				gameBoardArray[x][y2] = 1; // Put block into GBA
 				stoppedShapeArray[x][y2] = square // Draw color into stopped
+				// Look for the x and y values in the lookup table
 				let coordinateX = coordinateArray[x][y2].x
 				let coordinateY = coordinateArray[x][y2].y
 				ctx.fillStyle = nextSquare
 				ctx.fillRect(coordinateX, coordinateY, 21, 21)
 
 				square = 0;
-				gameBoardArray[x][i] = 0
-				stoppedShapeArray[x][i] = 0
+				gameBoardArray[x][i] = 0 // Clear the spot in gameboardArray
+				stoppedShapeArray[x][i] = 0 // Clear the spot in stoppedShapeArray
 				coordinateX = coordinateArray[x][i].x
 				coordinateY = coordinateArray[x][i].y
 				ctx.fillStyle = 'white'
@@ -482,12 +483,17 @@ function MoveAllRowsDown(rowsToDelete, startOfDeletion) {
 	}
 }
 
+// Rotate the Tetromino
 function RotateTetromino() {
 	let newRotation = new Array()
 	let tetrominoCopy = currentTetromino;
 	let currentTetrominoBackUp
 	for (let i = 0; i < tetrominoCopy.length; i++) {
+		/* Handle an error with a backup Tetromino. I am cloning the array
+		otherwise it would create a reference to the array that caused the error */
 		currentTetrominoBackUp = [...currentTetromino]
+		/* Find the new rotation by getting the x value of the last square of the Tetromino
+		and then we orientate the other squares based on it */
 		let x = tetrominoCopy[i][0]
 		let y = tetrominoCopy[i][1]
 		let newX = (GetLastSquareX() - y)
@@ -495,10 +501,13 @@ function RotateTetromino() {
 		newRotation.push([newX, newY])
 	}
 	DeleteTetromino()
+
+	// Try to draw the new Tetronimo rotation
 	try {
 		currentTetromino = newRotation
 		DrawTetromino()
 	} catch (e) {
+		// If there is an error get the backup Tetromino and draw it instead
 		if (e instanceof TypeError) {
 			currentTetromino = currentTetrominoBackUp;
 			DeleteTetromino()
@@ -507,6 +516,8 @@ function RotateTetromino() {
 	}
 }
 
+/* Get the x value for the last square in the Tetromino so we can orientate all other squares
+using that as a boundary. This simulates rotating the Tetromino */
 function GetLastSquareX() {
 	let lastX = 0
 	for (let i = 0; i < currentTetromino.length; i++) {
